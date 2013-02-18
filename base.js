@@ -26,7 +26,8 @@ define(['when', './lib/object', './lib/functional', './lib/component', './lib/in
 	}
 
 	function invoke(func, proxy, args, wire) {
-        return when(wire(args, func, proxy.path),
+		// Don't make these wired args resolvable
+        return when(wire(args/*, func, proxy.path*/),
 			function (resolvedArgs) {
 				return proxy.invoke(func, asArray(resolvedArgs));
 			}
@@ -145,7 +146,8 @@ define(['when', './lib/object', './lib/functional', './lib/component', './lib/in
 		setProperty = facet.set.bind(facet);
 
 		when.map(Object.keys(facet.options), function(key) {
-			return wire(properties[key], key, facet.path)
+			// Don't make these wired properties resolvable
+			return wire(properties[key]/*, key, facet.path*/)
 				.then(function(wiredProperty) {
 					setProperty(key, wiredProperty);
 				}
